@@ -1,0 +1,59 @@
+body {
+    background-color: #ffffff;
+}
+.Submit-btn {
+    background-color: #a2eaa5;
+    color : white;
+    border-radius: 4px;
+    cursor: pointer;
+    align-items: center;
+}
+
+.signup{
+    text-align: center;
+}
+.text-content{
+    float: left;
+    display: flex;
+    width: 50%;
+}
+
+.uni-img {
+    width: 100%;
+    height: 100%;
+    
+}
+.image{
+    width: 50%;
+    height: 100vh;
+    float: right;
+    display: flex;
+}
+.me{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.email{
+    text-align: center;
+}
+.fname{
+    text-align: center;
+}
+.lname{
+    text-align: center;
+}
+.establishment{
+    text-align: center;
+}
+.major{
+    text-align: center;
+}
+.bdate{
+    text-align: center;
+}
+.gender{
+    text-align: center;
+}
