@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter une question</title>
+    <link rel="stylesheet" href="questions.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="bi bi-laptop"></i>Go<span>Study</span></a></li>
+                    <li>
+                        <a href="#"><i class="bi bi-house"></i><span>Home</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="bi bi-pen-fill"></i><span>Exams</span></a>
+                        <ul>
+                            <li><a href="#"><i class="bi bi-plus-circle"></i> <span>Create Exam</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><i class="bi bi-collection"></i><span>Library</span></a>
+                        <ul>
+                            <li><a href="#"><i class="bi bi-list-ul"></i> <span>Exam list</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="text-area">
+            <div class="section">
+                <h1>Ajout de questions</h1><br>
+                <label>Type de question</label><br>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="direct" name="questionType" value="direct" checked>
+                        <label for="direct">Question directe</label><br>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="qcm" name="questionType" value="qcm">
+                        <label for="qcm">QCM</label><br>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="form-group">
+                    <label for="enonce">Énoncé de la question</label>
+                    <textarea id="enonce" placeholder="Saisissez l'énoncé de la question..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Média associé (optionnel)</label>
+                    <input type="file" id="media">
+                </div>
+            </div>
+
+            
+            <div id="direct-question" class="question-type active">
+                <div class="section">
+                    <h3>Question directe</h3><br>
+                    <div class="form-group">
+                        <label for="reponse">Réponse attendue</label>
+                        <input type="text" id="reponse" placeholder="Saisissez la réponse attendue...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="tolerance">Taux de tolérance (%)</label>
+                        <input type="number" id="tolerance" min="0" max="100" value="10">
+                    </div>
+                </div>
+            </div>
+
+            
+            <div id="qcm-question" class="question-type">
+                <div class="section">
+                    <h4>Options du QCM</h4><br>
+                    <div id="qcm-options">
+                        <div class="qcm-option">
+                            <input type="checkbox" id="option1-correct">
+                            <input type="text" id="option1" placeholder="Option 1">
+                        </div>
+                        <div class="qcm-option">
+                            <input type="checkbox" id="option2-correct">
+                            <input type="text" id="option2" placeholder="Option 2">
+                        </div>
+                    </div><br>
+                    <button type="button" class="submit-btn" onclick="addOption()">+ Ajouter une option</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Paramètres communs</h3><br>
+                <div class="form-group">
+                    <label for="note">Note attribuée</label>
+                    <input type="number" id="note" min="0" step="0.5" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="duree">Durée (en secondes)</label>
+                    <input type="number" id="duree" min="10" value="60">
+                </div>
+            </div>
+
+            <div class="form-group" style="display: flex; gap: 10px;">
+                <button type="button" class="submit-btn">Enregistrer la question</button>
+                <button type="button" class="submit-btn">Annuler</button>
+                <button type="button" id="finishBtn" class="submit-btn">Finished with Questions</button>
+                <div id="linkResult"></div> <!-- This will show the generated link -->
+            </div>
+        </div>
+
+    <script>
+        
+        document.querySelectorAll('input[name="questionType"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.question-type').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(this.value + '-question').classList.add('active');
+            });
+        });
+
+        
+        function addOption() {
+            const optionsContainer = document.getElementById('qcm-options');
+            const optionCount = optionsContainer.children.length + 1;
+            
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'qcm-option';
+            optionDiv.innerHTML = `
+                <input type="checkbox" id="option${optionCount}-correct">
+                <input type="text" id="option${optionCount}" placeholder="Option ${optionCount}">
+            `;
+            
+            optionsContainer.appendChild(optionDiv);
+        }
+        
+        document.getElementById('finishBtn').addEventListener('click', async () => {
+        try {
+            // 1. Get the exam ID (you'll need to set this somewhere)
+            const examId = "EXAM_ID_FROM_SOMEWHERE"; // Replace with actual exam ID
+            
+            // 2. Call backend to generate the exam link
+            const response = await fetch('/api/exams/generate-link', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ examId })
+            });
+
+            if (!response.ok) throw new Error('Failed to generate link');
+
+            // 3. Display the generated link
+            const { link } = await response.json();
+            const resultDiv = document.getElementById('linkResult');
+            resultDiv.innerHTML = `
+                <p>Exam Link:</p>
+                <a href="${link}" target="_blank">${link}</a>
+                <button onclick="copyToClipboard('${link}')">Copy</button>
+            `;
+        } catch (err) {
+            alert('Error: ' + err.message);
+        }
+        });
+
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => alert('Link copied!'))
+                .catch(() => alert('Failed to copy'));
+        }
+        
+        document.querySelector('.submit-btn').addEventListener('click', async () => {
+        const questionType = document.querySelector('input[name="questionType"]:checked').value;
+        const questionData = {
+            examId: "EXAM_ID_FROM_URL", // Get this from your URL or state
+            text: document.getElementById('enonce').value,
+            type: questionType,
+            points: parseFloat(document.getElementById('note').value),
+            duration: parseInt(document.getElementById('duree').value)
+        };
+
+        if (questionType === 'direct') {
+            questionData.correctAnswer = document.getElementById('response').value;
+            questionData.tolerance = parseInt(document.getElementById('tolerance').value);
+        } else {
+            // Process QCM options
+            const options = [];
+            document.querySelectorAll('.qcm-option').forEach((opt, index) => {
+            options.push({
+                text: opt.querySelector('input[type="text"]').value,
+                isCorrect: opt.querySelector('input[type="checkbox"]').checked
+            });
+            });
+            questionData.options = options;
+        }
+
+        // Send to backend
+        try {
+            const response = await fetch('/api/questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(questionData)
+            });
+            alert('Question saved successfully!');
+        } catch (error) {
+            alert('Error saving question');
+        }
+        });
+
+            const formData = new FormData();
+        formData.append('media', document.getElementById('media').files[0]);
+        // Add other fields
+        await fetch('/api/questions', { method: 'POST', body: formData });
+        document.getElementById('generateLinkBtn').addEventListener('click', async () => {
+        // 1. Get exam ID 
+        const examId = document.getElementById('examIdInput').value.trim(); // Optional
+
+        try {
+        // 2. Call backend to generate the link
+        const response = await fetch('/api/generate-exam-link', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ examId }), // Send data if required
+            });
+
+        if (!response.ok) throw new Error('Failed to generate link');
+
+        // 3. Display the generated link
+        const { link } = await response.json();
+        const resultDiv = document.getElementById('linkResult');
+        resultDiv.innerHTML = `
+            <p>Generated Link:</p>
+            <a href="${link}" target="_blank">${link}</a>
+            <button onclick="copyToClipboard('${link}')">Copy</button>
+            `;
+        } catch (err) {
+            document.getElementById('linkResult').textContent = 'Error: ' + err.message;
+        }
+        });
+    </script>
+        </div>
+    </div>
+</body>
+</html>

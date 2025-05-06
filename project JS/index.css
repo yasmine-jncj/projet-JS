@@ -119,7 +119,7 @@ header {
     margin-bottom: 30px;
 }
 
-header label {
+label {
     display: block;
     font-size: 1.8rem;
     font-weight: 600;
@@ -127,7 +127,16 @@ header label {
     margin-bottom: 30px;
 }
 
-/* Search Form Styles - Centered */
+input[type="text"],
+input[type="number"] 
+, textarea {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
 .search-form {
     display: flex;
     flex-direction: column;
@@ -158,7 +167,7 @@ header label {
     width: 200px;
 }
 
-/* Results Area */
+
 #resultat {
     margin-top: 30px;
     padding: 20px;

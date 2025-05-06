@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajout de questions</title>
+    <link rel="stylesheet" href="test-ajout.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="bi bi-laptop"></i> <span>Online Exam</span></a></li>
+                    <li>
+                        <a href="#"><span>Discover</span></a>
+                        <ul>
+                            <li><a href="#"><i class="bi bi-house"></i> <span>Home</span></a></li>
+                            <li><a href="#"><i class="bi bi-search"></i> <span>Browse</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#"><span>Library</span></a>
+                        <ul>
+                            <li><a href="#"><i class="bi bi-list-ul"></i> <span>Exam list</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <h1>Ajout de questions</h1>
+        
+        <div class="section">
+            <h2>Type de question</h2>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="direct" name="questionType" value="direct" checked>
+                    <label for="direct">Question directe</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="qcm" name="questionType" value="qcm">
+                    <label for="qcm">QCM</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="form-group">
+                <label for="enonce">Énoncé de la question</label>
+                <textarea id="enonce" placeholder="Saisissez l'énoncé de la question..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Média associé (optionnel)</label>
+                <input type="file" id="media">
+            </div>
+        </div>
+
+        <!-- Section Question Directe -->
+        <div id="direct-question" class="question-type active">
+            <div class="section">
+                <h2>Question directe</h2>
+                <div class="form-group">
+                    <label for="reponse">Réponse attendue</label>
+                    <input type="text" id="reponse" placeholder="Saisissez la réponse attendue...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tolerance">Taux de tolérance (%)</label>
+                    <input type="number" id="tolerance" min="0" max="100" value="10">
+                </div>
+            </div>
+        </div>
+
+        <!-- Section QCM -->
+        <div id="qcm-question" class="question-type">
+            <div class="section">
+                <h2>Options du QCM</h2>
+                <div id="qcm-options">
+                    <div class="qcm-option">
+                        <input type="checkbox" id="option1-correct">
+                        <input type="text" id="option1" placeholder="Option 1">
+                    </div>
+                    <div class="qcm-option">
+                        <input type="checkbox" id="option2-correct">
+                        <input type="text" id="option2" placeholder="Option 2">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addOption()">+ Ajouter une option</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Paramètres communs</h2>
+            <div class="form-group">
+                <label for="note">Note attribuée</label>
+                <input type="number" id="note" min="0" step="0.5" value="1">
+            </div>
+            
+            <div class="form-group">
+                <label for="duree">Durée (en secondes)</label>
+                <input type="number" id="duree" min="10" value="60">
+            </div>
+        </div>
+
+        <div class="form-group" style="display: flex; gap: 10px;">
+            <button type="button" class="btn">Enregistrer la question</button>
+            <button type="button" class="btn btn-secondary">Annuler</button>
+        </div>
+    </div>
+
+    <script>
+        // Basculer entre les types de questions
+        document.querySelectorAll('input[name="questionType"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.question-type').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(this.value + '-question').classList.add('active');
+            });
+        });
+
+        // Ajouter une option au QCM
+        function addOption() {
+            const optionsContainer = document.getElementById('qcm-options');
+            const optionCount = optionsContainer.children.length + 1;
+            
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'qcm-option';
+            optionDiv.innerHTML = `
+                <input type="checkbox" id="option${optionCount}-correct">
+                <input type="text" id="option${optionCount}" placeholder="Option ${optionCount}">
+            `;
+            
+            optionsContainer.appendChild(optionDiv);
+        }
+    </script>
+</body>
+</html>

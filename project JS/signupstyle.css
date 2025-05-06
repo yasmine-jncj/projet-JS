@@ -1,14 +1,17 @@
-/* signupstyle.css */
 body {
+    background: 
+        linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
+        url('image/blue.jpg') no-repeat center center fixed;
+        background-size: cover;
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden;
+
 }
 
 .container {
@@ -28,6 +31,24 @@ body {
     overflow-y: auto; /* Allow scrolling only inside form if needed */
 }
 
+.account-prompt {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+.Log-in {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+.Log-in:hover {
+    text-decoration: underline;
+}
+
 .image {
     flex: 1;
     background-color: #f0f4f8;
@@ -36,7 +57,7 @@ body {
     justify-content: center;
 }
 
-.uni-img {
+.log-img{
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -81,30 +102,82 @@ input[type="date"] {
     font-size: 0.9rem;
 }
 
-.gender {
+/*.gender {
     display: flex;
     flex-direction: column;
 }
 
 .gender-options {
     display: flex;
-    gap: 1rem;
     margin-top: 0.3rem;
 }
 
 .gender-option {
-    display: flex;
-    align-items: center;
+    /*display: flex;*/
+    /*align-items: center;
 }
 
 .gender input[type="radio"] {
-    margin-right: 0.5rem;
+    /*margin-right: 0.5rem;
+}*/
+
+/* Add this to your existing CSS */
+.gender {
+    margin-top: 15px;
+}
+
+.birthdate p{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.gender p{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.gender label {
+    display: inline-block;
+    margin-right: 20px;
+    margin-left: 5px;
+    font-weight: normal;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+}
+
+.gender input[type="radio"] {
+    margin-right: 5px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+
+.gender input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #4361ee;
+    border-radius: 50%;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.gender input[type="radio"]:checked {
+    background-color: #4361ee;
+    box-shadow: inset 0 0 0 3px white;
 }
 
 .Submit-btn {
     width: 100%;
     padding: 0.7rem;
-    background-color: #4361ee;
+    background: linear-gradient(135deg, #90c8f7, #c7d6e6);
     color: white;
     border: none;
     border-radius: 6px;
@@ -117,8 +190,6 @@ input[type="date"] {
     grid-column: 1 / -1;
     margin-top: 0.5rem;
 }
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
