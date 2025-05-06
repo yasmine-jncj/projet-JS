@@ -20,25 +20,26 @@
                     </div>
 
                     <div class="email">
-                        <label for="email">Email address</label><br/>
-                        <input type="text" name="email" id="email" required placeholder="example@mail.com"/><br/>
+                        <label for="email">Email address</label>
+                        <input type="text" name="email" id="email" required placeholder="example@mail.com"/>
                     </div></br>
                     
                     <div class="password">
-                        <label for="pseudo">Password</label></br>
-                        <input type="password" name="pass" id="pseudo" required/></br>
+                        <label for="pseudo">Password</label>
+                        <input type="password" name="pass" id="pseudo" required/>
                         <span id="passwordError" class="error-message"></span>
-                    </div></br>
+                    </div></br> 
                 
                     <div class="login">
-                        <button type="submit" class="submit-btn">Login</button>
+                        <a href="./studenthome.html"><button type="submit" class="submit-btn">Login</button></a>
+                        <p class="account-prompt">Don't have an account?<a href="./signupp.html" class="signup-link">Sign up</a></p>
                     </div>
                     <hr>
 
                     <div class="google-login">
                         <a href="https://accounts.google.com/">
                             <button type="button" class="google-btn">
-                                <img src="c:\Users\Acer\Desktop\ProjetJS\glogo.png" alt="Google" class="google-icon">
+                                <img src="pic/glogo.png" alt="Google" class="google-icon">
                                 Or sign in with Google
                             </button>
                         </a>
@@ -46,10 +47,11 @@
                 </form>
             </div>
         </div>
-        <div class="uni-img">
-            <img src="c:\Users\Acer\Desktop\ProjetJS\new.jpeg" alt="uni" class="image">
+        <div class="log-img">
+            <img src="pic/logimg.jpg" alt="uni" class="image">
         </div>
     </div>
     
+<script src="login.js"></script> 
 </body>
 </html>

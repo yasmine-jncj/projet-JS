@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Interface</title>
+    <link rel="stylesheet" href="studexam.css">
+</head> 
+<body>
+    <div class="container">
+        <!-- Exam Link -->
+        <div id="examLinkEntry" class="exam-section">
+            <h2>Enter Exam Link</h2>
+            <input type="text" id="examLink" placeholder="Paste exam link here">
+            <button id="startExamBtn" class="btn">Start Exam</button>
+        </div>
+
+        <!-- Geolocation -->
+        <div id="geolocationSection" class="exam-section hidden">
+            <h2>Exam Requirements</h2>
+            <p>This exam requires geolocation tracking. Please enable it to continue.</p>
+            <button id="enableGeoBtn" class="btn">Enable Geolocation</button>
+            <p id="geoStatus"></p>
+        </div>
+
+        <!-- Exam -->
+        <div id="examInterface" class="exam-section hidden">
+            <div class="exam-header">
+                <h2 id="examTitle">Exam</h2>
+                <div class="timer" id="questionTimer">00:00</div>
+            </div>
+            
+            <div class="question-container">
+                <div id="currentQuestion"></div>
+                <div id="questionOptions"></div>
+            </div>
+            
+            <button id="nextQuestionBtn" class="btn hidden">Next Question</button>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsSection" class="exam-section hidden">
+            <h2>Exam Results</h2>
+            <div class="score-display" id="scoreDisplay">Your score: 0/100</div>
+            <div id="examFeedback"></div>
+            <button id="finishExamBtn" class="btn">Finish Exam</button>
+        </div>
+    </div>
+
+    <script src="studexam.js"></script>
+</body>
+</html>
