@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: 
+                linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
+                url('pic/blue.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: rgb(7, 56, 119);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #90c8f7, #8cbaeb);
+            color: white;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            color: rgb(7, 56, 119);
+            font-weight: bold;
+            font-size: 24px;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo span {
+            color: #0066cc;
+        }
+
+        .nav-container {
+            flex: 1;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar li {
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar li:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar li.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #0066cc;
+        }
+
+        /* Logout Button in Sidebar */
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn {
+            background: rgb(7, 56, 119);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #90c8f7, #8cbaeb);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Main Content Styles */
+        .container {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        /* Exam Card */
+        .exam-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .exam-card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            font-weight: 400;
+            font-style: italic;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .exam-card p {
+            color: #666;
+            
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #90c8f7, #8cbaeb);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(144, 200, 247, 0.3);
+            width: auto;
+            display: inline-block;
+        }
+
+        .start-btn:hover {
+            background: linear-gradient(135deg, #90c8f7, #c7d6e6);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(144, 200, 247, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            .sidebar span {
+                display: none;
+            }
+            .sidebar li {
+                text-align: center;
+                padding: 12px 5px;
+            }
+            .sidebar li a {
+                justify-content: center;
+            }
+            .logo span {
+                display: none;
+            }
+            .logout-btn span {
+                display: none;
+            }
+            .exam-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="bi bi-laptop"></i>
+            Go<span>Study</span>
+        </div>
+        
+        <div class="nav-container">
+            <nav>
+                <ul>
+                    <li class="active">
+                        <a href="#">
+                            <i class="bi bi-house"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-journal-text"></i>
+                            <span>Exams</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+        <div class="sidebar-footer">
+            <button class="logout-btn">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Welcome, Student!</h1>
+        </div>
+
+        <div class="exam-card">
+            <h2>Start Your Exam</h2>
+            <p>Make sure you're in a quiet environment before starting.</p>
+            <a href="./studexam.html"><button class="start-btn">Begin Exam Now</button></a>
+        </div>
+    </div>
+
+<script>
+    // Logout functionality
+    document.querySelector('.logout-btn').addEventListener('click', function() {
+        if(confirm('Are you sure you want to logout?')) {
+            // Clear session data if needed
+            localStorage.removeItem('studentToken');
+            // Redirect to login page
+            window.location.href = './student_login.html';
+        }
+    });
+
+    // Active navigation highlighting
+    const navLinks = document.querySelectorAll('.sidebar nav ul li');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            navLinks.forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Exam start confirmation
+    document.querySelector('.start-btn').addEventListener('click', function(e) {
+        if(!confirm('Are you ready to start the exam? You cannot pause once started.')) {
+            e.preventDefault(); // Prevent navigation if canceled
+        }
+
+    });
+</script>
+</body>
+</html>

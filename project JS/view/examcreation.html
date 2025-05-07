@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Exam</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: 
+                linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
+                url('image/blue.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: rgb(7, 56, 119);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #90c8f7, #8cbaeb);
+            color: white;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: rgb(7, 56, 119);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #0066cc;
+        }
+
+        .nav-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav > ul > li {
+            position: relative;
+        }
+
+        .sidebar nav > ul > li > a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar nav > ul > li:hover > a {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar nav > ul > li.active > a {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #0066cc;
+        }
+
+        /* Nested menu items */
+        .sidebar nav > ul > li > ul {
+            padding-left: 15px;
+            display: none;
+        }
+
+        .sidebar nav > ul > li.active > ul {
+            display: block;
+        }
+
+        .sidebar nav > ul > li > ul > li > a {
+            padding: 10px 20px 10px 30px;
+            font-size: 0.9rem;
+            display: block;
+            color: white;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar nav > ul > li > ul > li:hover > a {
+            border-left: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Logout Button */
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn {
+            background: rgb(7, 56, 119);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #90c8f7, #8cbaeb);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Main Content Styles */
+        .text-area {
+            flex: 1;
+            padding: 30px;
+            background-color: white;
+            margin: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-area > label {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: rgb(7, 56, 119);
+            margin-bottom: 30px;
+        }
+
+        #form-examen {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #form-examen input[type="text"],
+        #form-examen input[type="number"],
+        #form-examen textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        #form-examen textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #90c8f7, #8cbaeb);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(144, 200, 247, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #90c8f7, #c7d6e6);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(144, 200, 247, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .sidebar nav > ul > li > a > span {
+                display: none;
+            }
+            
+            .sidebar nav > ul > li > a {
+                justify-content: center;
+            }
+            
+            .logo span {
+                display: inline;
+            }
+            
+            .text-area {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .text-area > label {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <i class="bi bi-laptop"></i>
+                Go<span>Study</span>
+            </div>
+            
+            <div class="nav-container">
+                <nav>
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <i class="bi bi-house"></i>
+                                <span>Home</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="#">
+                                <i class="bi bi-pen-fill"></i>
+                                <span>Exams</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="bi bi-plus-circle"></i>
+                                        <span>Create Exam</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="bi bi-collection"></i>
+                                <span>Library</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="#">
+                                        <i class="bi bi-list-ul"></i>
+                                        <span>Exam list</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="text-area">
+            <label for="Examen">Create a new exam</label>
+
+            <form id="form-examen">
+                <input type="text" id="nom" placeholder="Exam name" required>
+                <input type="number" id="duree" placeholder="Duration (minutes)" required>
+                <textarea id="description" placeholder="Description"></textarea>
+                <input type="text" id="proprietaire" placeholder="Target audience" required>
+                <button type="submit" class="submit-btn">Add exam</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('add-proposition').addEventListener('click', () => {
+            const container = document.createElement('div');
+            const input = document.createElement('input');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            input.type = 'text';
+            input.placeholder = 'Proposition';
+            container.appendChild(checkbox);
+            container.appendChild(input);
+            document.getElementById('propositions').appendChild(container);
+        });
+
+        document.getElementById('form-question').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const enonce = document.getElementById('enonce').value;
+            const duree = parseInt(document.getElementById('duree').value);
+            const points = parseInt(document.getElementById('points').value);
+            const proprietaire = document.getElementById('proprietaire').value;
+            const nomExamen = document.getElementById('nom-examen').value;
+
+            const propositions = [];
+            document.querySelectorAll('#propositions div').forEach(div => {
+                const texte = div.querySelector('input[type="text"]').value;
+                const correcte = div.querySelector('input[type="checkbox"]').checked;
+                propositions.push({ texte, correcte });
+            });
+
+            const examsKey = 'examens_' + proprietaire;
+            const exams = JSON.parse(localStorage.getItem(examsKey)) || [];
+            const exam = exams.find(e => e.nom === nomExamen);
+            if (!exam) {
+                alert('Examen non trouvé !');
+                return;
+            }
+            const question = { enonce, duree, points, propositions };
+            exam.questions.push(question);
+            localStorage.setItem(examsKey, JSON.stringify(exams));
+            alert('Question ajoutée avec succès !');
+            this.reset();
+            document.getElementById('propositions').innerHTML = '';
+        });
+    </script>
+</body>
+</html>

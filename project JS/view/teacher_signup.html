@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inscription</title>
+    <style>
+        body {
+            background: 
+                linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
+                url('image/blue.jpg') no-repeat center center fixed;
+                background-size: cover;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+
+        }
+
+        .container {
+            display: flex;
+            width: 95%;
+            max-width: 1000px;
+            height: 95vh;
+            max-height: 700px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto; /* Allow scrolling only inside form if needed */
+        }
+
+        .account-prompt {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .Log-in {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 4px;
+        }
+
+        .Log-in:hover {
+            text-decoration: underline;
+        }
+
+        .image {
+            flex: 1;
+            background-color: #f0f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .log-img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .me {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        h1 {
+            grid-column: 1 / -1;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin: 0 0 1.5rem 0;
+            text-align: center;
+        }
+
+        .email, .fname, .lname, 
+        .establishment, .major, 
+        .birthdate, .gender, .signup {
+            margin: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            color: #34495e;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"] {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        /*.gender {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gender-options {
+            display: flex;
+            margin-top: 0.3rem;
+        }
+
+        .gender-option {
+            /*display: flex;*/
+            /*align-items: center;
+        }
+
+        .gender input[type="radio"] {
+            /*margin-right: 0.5rem;
+        }*/
+
+        /* Add this to your existing CSS */
+        .gender {
+            margin-top: 15px;
+        }
+
+        .birthdate p{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .gender p{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .gender label {
+            display: inline-block;
+            margin-right: 20px;
+            margin-left: 5px;
+            font-weight: normal;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+        }
+
+        .gender input[type="radio"] {
+            margin-right: 5px;
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+
+        .gender input[type="radio"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #4361ee;
+            border-radius: 50%;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .gender input[type="radio"]:checked {
+            background-color: #4361ee;
+            box-shadow: inset 0 0 0 3px white;
+        }
+
+        .Submit-btn {
+            width: 100%;
+            padding: 0.7rem;
+            background: linear-gradient(135deg, #90c8f7, #c7d6e6);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .signup {
+            grid-column: 1 / -1;
+            margin-top: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+                max-height: none;
+            }
+            
+            .image {
+                height: 150px;
+            }
+            
+            .me {
+                grid-template-columns: 1fr;
+            }
+            
+            .signup {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="height: fit-content;">
+        <div class="text-content">
+            <div class="me">
+                
+                <form action="/submit-form" method="post">
+                    <h1>Registration<br></h1>
+                        <div class="email">
+                            <label for="email">Enter your email</label>
+                            <input type="email"id="email"name="email" required placeholder="exemple@gmail.com"><br>
+                        </div><br>
+                    
+                        <div class="fname">
+                            <label for="fname">First name</label>
+                            <input type="text"id="fname"name="fname" required><br>
+                        </div><br>
+                    
+                        <div class="lname">
+                            <label for="lname">Last name</label>
+                            <input type="text"id="lname"name="lname" required><br>
+                        </div><br>
+                    
+                        <div class="establishment">
+                            <label for="Establishment">Establishment</label>
+                            <input type="text"id="Establishment"name="Establishment" required><br>
+                        </div><br>
+
+                        <div class="major">
+                            <label for="major">major</label>
+                            <input type="text"id="major"name="major" required><br>
+                        </div><br>
+
+                        <div class="birthdate"> 
+                            <p>Enter your birthdate</p>
+                            <input type="date" /><br>
+                        </div><br>
+
+                        <div class="gender">
+                            <p>Choose your gender:</p>
+                            <input type="radio" id="male" name="gender" value="male">
+                            <label for="male">Male</label>
+                            
+                            <input type="radio" id="female" name="gender" value="female">
+                            <label for="female">Female</label>
+                        </div><br>
+
+                        <div class="signup"><button type="submit" class="Submit-btn">sign up</button>
+                            <p class="account-prompt">Already have an account? <a href="./teacher_login.html" class="Log-in">Log in</a></p>
+                        </div><br>
+                </form>
+            </div>
+        </div>
+        <div class="image">
+            <img class="log-img" src="pic/logimg.jpg" alt="uni">
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const emailInput = document.getElementById('email');
+            const fnameInput = document.getElementById('fname');
+            const lnameInput = document.getElementById('lname');
+            const establishmentInput = document.getElementById('Establishment');
+            const majorInput = document.getElementById('major');
+            const birthdateInput = document.querySelector('.birthdate input[type="date"]');
+            const genderInputs = document.querySelectorAll('input[name="gender"]');
+            const submitBtn = document.querySelector('.Submit-btn');
+
+            // Determine user type from URL or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const userType = urlParams.get('type') || localStorage.getItem('userType') || 'student';
+            
+            // Update login link based on user type
+            const loginLink = document.querySelector('.Log-in');
+            if (loginLink) {
+                loginLink.href = userType === 'teacher' ? 'teacher_login.html' : 'student_login.html';
+            }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    handleFormSubmission(userType);
+                }
+            });
+
+            function validateForm() {
+                let isValid = true;
+                clearErrors();
+
+                if (!emailInput.value) {
+                    showError(emailInput, 'Email is required');
+                    isValid = false;
+                } else if (!isValidEmail(emailInput.value)) {
+                    showError(emailInput, 'Please enter a valid email address');
+                    isValid = false;
+                }
+
+                if (!fnameInput.value) {
+                    showError(fnameInput, 'First name is required');
+                    isValid = false;
+                }
+
+                if (!lnameInput.value) {
+                    showError(lnameInput, 'Last name is required');
+                    isValid = false;
+                }
+
+                if (!establishmentInput.value) {
+                    showError(establishmentInput, 'Establishment is required');
+                    isValid = false;
+                }
+
+                if (!majorInput.value) {
+                    showError(majorInput, 'Major is required');
+                    isValid = false;
+                }
+
+                if (!birthdateInput.value) {
+                    showError(birthdateInput.parentNode, 'Birthdate is required');
+                    isValid = false;
+                }
+
+                let genderSelected = false;
+                genderInputs.forEach(input => {
+                    if (input.checked) genderSelected = true;
+                });
+                
+                if (!genderSelected) {
+                    showError(document.querySelector('.gender'), 'Please select your gender');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            function handleFormSubmission(userType) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Processing...';
+
+                // Prepare form data
+                const formData = {
+                    email: emailInput.value,
+                    firstName: fnameInput.value,
+                    lastName: lnameInput.value,
+                    establishment: establishmentInput.value,
+                    major: majorInput.value,
+                    birthdate: birthdateInput.value,
+                    gender: Array.from(genderInputs).find(input => input.checked)?.value,
+                    userType: userType
+                };
+
+                // Simulate API call
+                setTimeout(() => {
+                    // Store data for login page
+                    sessionStorage.setItem('signedUpEmail', formData.email);
+                    
+                    // Show success message
+                    const successMsg = document.createElement('div');
+                    successMsg.className = 'success-message';
+                    successMsg.innerHTML = `
+                        <p style="color: green; margin: 20px 0; text-align: center; font-weight: bold;">
+                            Registration successful! Redirecting to login...
+                        </p>
+                    `;
+                    form.parentNode.insertBefore(successMsg, form.nextSibling);
+                    form.style.display = 'none';
+
+                    // Redirect to appropriate login page
+                    setTimeout(() => {
+                        const loginPage = userType === 'teacher' ? 'teacher_login.html' : 'student_login.html';
+                        window.location.href = `${loginPage}?from=signup&new_user=true`;
+                    }, 2000);
+                    
+                }, 1500);
+            }
+
+            function isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            function showError(input, message) {
+                const errorElement = document.createElement('div');
+                errorElement.className = 'error-message';
+                errorElement.style.color = 'red';
+                errorElement.style.fontSize = '0.8rem';
+                errorElement.style.marginTop = '5px';
+                errorElement.textContent = message;
+                
+                if (input.tagName === 'DIV' || input.tagName === 'P') {
+                    input.appendChild(errorElement);
+                } else {
+                    input.parentNode.insertBefore(errorElement, input.nextSibling);
+                }
+                
+                input.classList.add('error');
+            }
+
+            function clearErrors() {
+                document.querySelectorAll('.error-message').forEach(el => el.remove());
+                document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            }
+
+            emailInput.addEventListener('blur', function() {
+                if (this.value && !isValidEmail(this.value)) {
+                    showError(this, 'Please enter a valid email address');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: 
+                linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
+                url('pic/blue.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .exam-section {
+            flex: 1;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .exam-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        #examTitle {
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 400;
+            font-style: italic;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .question-container {
+            margin: 2rem 0;
+        }
+
+        #currentQuestion {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .option {
+            display: block;
+            margin: 0.8rem 0;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #90c8f7, #8cbaeb);
+            color: white;
+            border-color: #3498db;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #90c8f7, #8cbaeb);
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #90c8f7, #c7d6e6);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            margin-bottom: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        #examFeedback {
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 90%;
+            }
+            
+            .exam-section {
+                padding: 30px;
+            }
+            
+            #examTitle {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+            }
+        }
+    </style>
+</head> 
+<body>
+    <div class="container">
+        <!-- Exam Link -->
+        <div id="examLinkEntry" class="exam-section">
+            <h2>Enter Exam Link</h2>
+            <input type="text" id="examLink" placeholder="Paste exam link here">
+            <button id="startExamBtn" class="btn">Start Exam</button>
+        </div>
+
+        <!-- Geolocation -->
+        <div id="geolocationSection" class="exam-section hidden">
+            <h2>Exam Requirements</h2>
+            <p>This exam requires geolocation tracking. Please enable it to continue.</p>
+            <button id="enableGeoBtn" class="btn">Enable Geolocation</button>
+            <p id="geoStatus"></p>
+        </div>
+
+        <!-- Exam -->
+        <div id="examInterface" class="exam-section hidden">
+            <div class="exam-header">
+                <h2 id="examTitle">Exam</h2>
+                <div class="timer" id="questionTimer">00:00</div>
+            </div>
+            
+            <div class="question-container">
+                <div id="currentQuestion"></div>
+                <div id="questionOptions"></div>
+            </div>
+            
+            <button id="nextQuestionBtn" class="btn hidden">Next Question</button>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsSection" class="exam-section hidden">
+            <h2>Exam Results</h2>
+            <div class="score-display" id="scoreDisplay">Your score: 0/100</div>
+            <div id="examFeedback"></div>
+            <button id="finishExamBtn" class="btn">Finish Exam</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const examLinkEntry = document.getElementById('examLinkEntry');
+            const geolocationSection = document.getElementById('geolocationSection');
+            const examInterface = document.getElementById('examInterface');
+            const resultsSection = document.getElementById('resultsSection');
+            const startExamBtn = document.getElementById('startExamBtn');
+            const enableGeoBtn = document.getElementById('enableGeoBtn');
+            const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+            const finishExamBtn = document.getElementById('finishExamBtn');
+            const questionTimer = document.getElementById('questionTimer');
+            const currentQuestion = document.getElementById('currentQuestion');
+            const questionOptions = document.getElementById('questionOptions');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            
+            // Exam state
+            let examData = null;
+            let currentQuestionIndex = 0;
+            let score = 0;
+            let timerInterval;
+            let timeLeft = 0;
+            let geolocation = null;
+            
+            // Start exam when link is entered
+            startExamBtn.addEventListener('click', function() {
+                const examLink = document.getElementById('examLink').value.trim();
+                if (!examLink) {
+                    alert('Please enter a valid exam link');
+                    return;
+                }
+                
+                fetchExamData(examLink);
+            });
+            
+            // Enable geolocation
+            enableGeoBtn.addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            geolocation = {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude
+                            };
+                            document.getElementById('geoStatus').textContent = 'Geolocation enabled!';
+                            enableGeoBtn.disabled = true;
+                            setTimeout(startExam, 1500);
+                        },
+                        function(error) {
+                            document.getElementById('geoStatus').textContent = 'Error getting location: ' + error.message;
+                        }
+                    );
+                } else {
+                    document.getElementById('geoStatus').textContent = 'Geolocation is not supported by this browser.';
+                }
+            });
+            
+            // Next question button
+            nextQuestionBtn.addEventListener('click', function() {
+                saveAnswer();
+                currentQuestionIndex++;
+                if (currentQuestionIndex < examData.questions.length) {
+                    displayQuestion();
+                } else {
+                    finishExam();
+                }
+            });
+            
+            // Finish exam button
+            finishExamBtn.addEventListener('click', function() {
+                window.location.href = 'studentdashboard.html'; // Or wherever students should go
+            });
+            
+            async function fetchExamData(link) {
+                try {
+                    // Extract exam ID from the link
+                    const examId = new URL(link).searchParams.get('id');
+                    
+                    // Get exam from localStorage (in a real app, this would be a backend API call)
+                    const exams = JSON.parse(localStorage.getItem('teacherExams')) || [];
+                    examData = exams.find(exam => exam.id === examId);
+                    
+                    if (!examData) {
+                        throw new Error("Exam not found");
+                    }
+                    
+                    examLinkEntry.classList.add('hidden');
+                    geolocationSection.classList.remove('hidden');
+                } catch (error) {
+                    alert(error.message);
+                    startExamBtn.disabled = false;
+                    startExamBtn.textContent = 'Start Exam';
+                }
+            }
+            
+            function startExam() {
+                geolocationSection.classList.add('hidden');
+                examInterface.classList.remove('hidden');
+                document.getElementById('examTitle').textContent = examData.title || "Exam";
+                displayQuestion();
+            }
+            
+            function displayQuestion() {
+                const question = examData.questions[currentQuestionIndex];
+                currentQuestion.innerHTML = '';
+                questionOptions.innerHTML = '';
+                
+                const questionText = document.createElement('div');
+                questionText.className = 'question';
+                questionText.textContent = question.statement;
+                currentQuestion.appendChild(questionText);
+                
+                if (question.type === 'qcm') {
+                    question.options.forEach((option, index) => {
+                        const optionElement = document.createElement('div');
+                        optionElement.className = 'option';
+                        optionElement.innerHTML = `
+                            <input type="radio" name="qcm-answer" id="option-${index}" value="${index}">
+                            <label for="option-${index}">${option.text}</label>
+                        `;
+                        questionOptions.appendChild(optionElement);
+                    });
+                } else {
+                    const answerInput = document.createElement('input');
+                    answerInput.type = 'text';
+                    answerInput.id = 'direct-answer';
+                    answerInput.placeholder = 'Type your answer here...';
+                    questionOptions.appendChild(answerInput);
+                }
+                
+                // Show next button if not last question
+                if (currentQuestionIndex < examData.questions.length - 1) {
+                    nextQuestionBtn.classList.remove('hidden');
+                } else {
+                    nextQuestionBtn.classList.add('hidden');
+                }
+                
+                startTimer(question.duration || 60);
+            }
+             
+            function startTimer(seconds) {
+                timeLeft = seconds;
+                updateTimerDisplay();
+                if (timerInterval) clearInterval(timerInterval);
+                timerInterval = setInterval(function() {
+                    timeLeft--;
+                    updateTimerDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        saveAnswer();
+                        currentQuestionIndex++;
+                        if (currentQuestionIndex < examData.questions.length) {
+                            displayQuestion();
+                        } else {
+                            finishExam();
+                        }
+                    }
+                }, 1000);
+            }
+            
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                questionTimer.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            function saveAnswer() {
+                const question = examData.questions[currentQuestionIndex];
+                let isCorrect = false;
+                
+                if (question.type === 'qcm') {
+                    const selectedOption = document.querySelector('input[name="qcm-answer"]:checked');
+                    if (selectedOption) {
+                        isCorrect = question.options[selectedOption.value].correct;
+                    }
+                } else {
+                    const studentAnswer = document.getElementById('direct-answer')?.value.toLowerCase();
+                    const correctAnswer = question.answer.toLowerCase();
+                    if (question.tolerance > 0) {
+                        isCorrect = studentAnswer.includes(correctAnswer) || 
+                                   correctAnswer.includes(studentAnswer);
+                    } else {
+                        isCorrect = studentAnswer === correctAnswer;
+                    }
+                }
+                if (isCorrect) {
+                    score += question.points || 1;
+                }
+            }
+            
+            function finishExam() {
+                clearInterval(timerInterval);
+                examInterface.classList.add('hidden');
+                resultsSection.classList.remove('hidden');
+                
+                // Calculate total possible points
+                const totalPoints = examData.questions.reduce((sum, q) => sum + (q.points || 1), 0);
+                const percentage = Math.round((score / totalPoints) * 100);
+                
+                scoreDisplay.textContent = `Your score: ${score}/${totalPoints} (${percentage}%)`;
+                const feedback = document.getElementById('examFeedback');
+                
+                if (percentage >= 80) {
+                    feedback.textContent = "Excellent work!";
+                } else if (percentage >= 50) {
+                    feedback.textContent = "Good job, but there's room for improvement.";
+                } else {
+                    feedback.textContent = "Keep practicing! Review the material and try again.";
+                }
+            }
+
+            // Keyboard support
+            document.getElementById('examLink').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') startExamBtn.click();
+            });
+            
+            document.getElementById('enableGeoBtn').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') enableGeoBtn.click();
+            });
+            
+            document.getElementById('nextQuestionBtn').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') nextQuestionBtn.click();
+            });
+            
+            document.getElementById('finishExamBtn').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') finishExamBtn.click();
+            });
+        });
+    </script>
+</body>
+</html>
