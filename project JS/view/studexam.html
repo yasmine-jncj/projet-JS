@@ -211,7 +211,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
             const examLinkEntry = document.getElementById('examLinkEntry');
             const geolocationSection = document.getElementById('geolocationSection');
             const examInterface = document.getElementById('examInterface');
@@ -279,7 +278,7 @@
             
             // Finish exam button
             finishExamBtn.addEventListener('click', function() {
-                window.location.href = 'studentdashboard.html'; // Or wherever students should go
+                window.location.href = 'studenthome.html'; 
             });
             
             async function fetchExamData(link) {
@@ -287,7 +286,7 @@
                     // Extract exam ID from the link
                     const examId = new URL(link).searchParams.get('id');
                     
-                    // Get exam from localStorage (in a real app, this would be a backend API call)
+                    // Get exam from localStorage
                     const exams = JSON.parse(localStorage.getItem('teacherExams')) || [];
                     examData = exams.find(exam => exam.id === examId);
                     
@@ -405,7 +404,7 @@
                 examInterface.classList.add('hidden');
                 resultsSection.classList.remove('hidden');
                 
-                // Calculate total possible points
+                // Calculate total points
                 const totalPoints = examData.questions.reduce((sum, q) => sum + (q.points || 1), 0);
                 const percentage = Math.round((score / totalPoints) * 100);
                 
@@ -421,7 +420,7 @@
                 }
             }
 
-            // Keyboard support
+            // Keyboard 
             document.getElementById('examLink').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') startExamBtn.click();
             });

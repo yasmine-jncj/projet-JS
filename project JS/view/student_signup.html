@@ -87,7 +87,8 @@
 
         .email, .fname, .lname, 
         .establishment, .major, 
-        .birthdate, .gender, .signup {
+        .birthdate, .gender, .signup,
+        .password, .confirm-password {
             margin: 0;
         }
 
@@ -101,7 +102,8 @@
 
         input[type="text"],
         input[type="email"],
-        input[type="date"] {
+        input[type="date"],
+        input[type="password"] {
             width: 100%;
             padding: 0.6rem;
             border: 1px solid #ddd;
@@ -109,26 +111,6 @@
             font-size: 0.9rem;
         }
 
-        /*.gender {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .gender-options {
-            display: flex;
-            margin-top: 0.3rem;
-        }
-
-        .gender-option {
-            /*display: flex;*/
-            /*align-items: center;
-        }
-
-        .gender input[type="radio"] {
-            /*margin-right: 0.5rem;
-        }*/
-
-        /* Add this to your existing CSS */
         .gender {
             margin-top: 15px;
         }
@@ -197,6 +179,19 @@
             grid-column: 1 / -1;
             margin-top: 0.5rem;
         }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+        
+        .password-wrapper {
+            position: relative;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -239,6 +234,24 @@
                             <label for="lname">Last name</label>
                             <input type="text"id="lname"name="lname" required><br>
                         </div><br>
+                        
+                        <div class="password">
+                            <label for="password">Create Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="password" name="password" required 
+                                       placeholder="At least 8 characters" minlength="8">
+                                <span class="password-toggle">👁️</span>
+                            </div>
+                        </div><br>
+                        
+                        <div class="confirm-password">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="confirmPassword" name="confirmPassword" required 
+                                       placeholder="Re-enter your password">
+                                <span class="password-toggle">👁️</span>
+                            </div>
+                        </div><br>
                     
                         <div class="establishment">
                             <label for="Establishment">Establishment</label>
@@ -280,11 +293,22 @@
             const emailInput = document.getElementById('email');
             const fnameInput = document.getElementById('fname');
             const lnameInput = document.getElementById('lname');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
             const establishmentInput = document.getElementById('Establishment');
             const majorInput = document.getElementById('major');
             const birthdateInput = document.querySelector('.birthdate input[type="date"]');
             const genderInputs = document.querySelectorAll('input[name="gender"]');
             const submitBtn = document.querySelector('.Submit-btn');
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+
+            // Password toggle functionality
+            passwordToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('input');
+                    input.type = input.type === 'password' ? 'text' : 'password';
+                });
+            });
 
             // Determine user type from URL or localStorage
             const urlParams = new URLSearchParams(window.location.search);
@@ -325,6 +349,22 @@
                     showError(lnameInput, 'Last name is required');
                     isValid = false;
                 }
+                
+                if (!passwordInput.value) {
+                    showError(passwordInput, 'Password is required');
+                    isValid = false;
+                } else if (passwordInput.value.length < 8) {
+                    showError(passwordInput, 'Password must be at least 8 characters');
+                    isValid = false;
+                }
+
+                if (!confirmPasswordInput.value) {
+                    showError(confirmPasswordInput, 'Please confirm your password');
+                    isValid = false;
+                } else if (passwordInput.value !== confirmPasswordInput.value) {
+                    showError(confirmPasswordInput, 'Passwords do not match');
+                    isValid = false;
+                }
 
                 if (!establishmentInput.value) {
                     showError(establishmentInput, 'Establishment is required');
@@ -363,6 +403,7 @@
                     email: emailInput.value,
                     firstName: fnameInput.value,
                     lastName: lnameInput.value,
+                    password: passwordInput.value,
                     establishment: establishmentInput.value,
                     major: majorInput.value,
                     birthdate: birthdateInput.value,
