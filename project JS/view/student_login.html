@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
+    <title>Login Page</title>
     <style>
         body {
             margin: 0;
@@ -103,8 +103,6 @@
             background-color: #eee;
         }
 
-
-
         .google-btn {
             width: 100%;
             padding: 12px;
@@ -128,7 +126,6 @@
             border-color: #cbd5e0;
             color: #4a5568 !important;  
         }
-
 
         .google-login a {
             text-decoration: none !important;
@@ -166,13 +163,32 @@
             text-decoration: underline;
         }
 
-
         .image {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%237f8c8d"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .toggle-password.show {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%237f8c8d"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>');
+        }
 
         @media (max-width: 768px) {
             .container {
@@ -189,14 +205,11 @@
             }
         }
     </style>
-    
 </head>
 <body class="body">
-    
     <div class="container" style="height: fit-content;">
         <div class="text-content" >
             <div class="half">
-                
                 <form id="login">
                     <div>
                         <h1> WELCOME!</h1>
@@ -210,13 +223,17 @@
                     
                     <div class="password">
                         <label for="pseudo">Password</label>
-                        <input type="password" name="pass" id="pseudo" required/>
+                        <div class="password-container">
+                            <input type="password" name="pass" id="pseudo" required/>
+                            <span class="toggle-password" onclick="togglePasswordVisibility()"></span>
+                        </div>
                         <span id="passwordError" class="error-message"></span>
                     </div></br> 
                 
                     <div class="login">
                         <button type="submit" class="submit-btn">Login</button>
-                        <p class="account-prompt">Don't have an account?<a href="./student_signup.html" class="signup-link">Sign up</a></p>
+                        <p class="account-prompt">Don't have an account?<a href="./student_login.html" class="signup-link">Sign up</a>
+                        </p>
                     </div>
                     <hr>
 
@@ -236,34 +253,54 @@
         </div>
     </div>
     
-<script>
-    document.getElementById('login').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Validate form
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('pseudo').value;
-        const errorElement = document.getElementById('passwordError');
-        errorElement.textContent = '';
-        
-        if (!email.includes('@') || !email.includes('.')) {
-            errorElement.textContent = 'Please enter a valid email';
-            return;
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('pseudo');
+            const toggleIcon = document.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.add('show');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('show');
+            }
         }
         
-        if (password.length < 8) {
-            errorElement.textContent = 'Password must be at least 8 characters';
-            return;
-        }
-        
-        // Redirect based on user type
-        const userType = sessionStorage.getItem('userType');
-        if (userType === 'teacher') {
-            window.location.href = './teacherhome.html';
-        } else {
-            window.location.href = './studenthome.html';
-        }
-    });
-</script> 
+        document.getElementById('login').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('pseudo').value;
+            const errorElement = document.getElementById('passwordError');
+            errorElement.textContent = '';
+            
+            // Email validation
+            if (!email.includes('@') || !email.includes('.')) {
+                errorElement.textContent = 'Please enter a valid email';
+                return;
+            }
+            
+            // Get stored user data from localStorage
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            
+            // Check if user exists
+            if (!userData || email !== userData.email) {
+                errorElement.textContent = 'Email not found. Please sign up first.';
+                return;
+            }
+            
+            // Check password (plain text comparison)
+            if (password !== userData.password) {
+                errorElement.textContent = 'Incorrect password. Please try again.';
+                return;
+            }
+            
+            // Redirect based on user type
+            window.location.href = userData.userType === 'teacher' 
+                ? './teacherhome.html' 
+                : './studenthome.html';
+        });
+    </script> 
 </body>
 </html>

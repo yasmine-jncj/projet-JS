@@ -86,7 +86,7 @@
             border-left: 4px solid #0066cc;
         }
 
-        /* Nested menu items */
+        /* Menu */
         .sidebar ul ul {
             padding-left: 15px;
             display: none;
@@ -136,7 +136,6 @@
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
 
-        /* Main Content Area */
         .text-area {
             flex: 1;
             padding: 30px;
@@ -238,7 +237,6 @@
             box-shadow: 0 6px 12px rgba(144, 200, 247, 0.4);
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -407,18 +405,14 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get all radio buttons
             const questionTypeRadios = document.querySelectorAll('input[name="questionType"]');
-            
-            // Add change event to each radio button
             questionTypeRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
-                    // Hide all question type sections
+                    
                     document.querySelectorAll('.question-type').forEach(section => {
                         section.classList.remove('active');
                     });
-                    
-                    // Show the selected question type
+            
                     const selectedType = this.value;
                     document.getElementById(`${selectedType}-question`).classList.add('active');
                 });
@@ -427,7 +421,7 @@
             // Initialize to show direct question by default
             document.getElementById('direct-question').classList.add('active');
 
-            // Add logout functionality
+            // Logout functionality
             document.querySelector('.logout-btn').addEventListener('click', () => {
                 if(confirm('Are you sure you want to logout?')) {
                     // Clear any session data
@@ -459,7 +453,6 @@
         }
 
         function saveQuestion() {
-            // Get all form values
             const question = {
                 type: document.querySelector('input[name="questionType"]:checked').value,
                 statement: document.getElementById('enonce').value,
@@ -527,7 +520,7 @@
                 id: examId,
                 questions: examQuestions,
                 dateCreated: new Date().toISOString(),
-                title: "Your Exam Title" // You can get this from a form field
+                title: "Good Luck!" 
             });
             
             localStorage.setItem('teacherExams', JSON.stringify(exams));
