@@ -18,7 +18,6 @@
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-
         }
 
         .container {
@@ -35,7 +34,7 @@
         .text-content {
             flex: 1;
             padding: 2rem;
-            overflow-y: auto; /* Allow scrolling only inside form if needed */
+            overflow-y: auto;
         }
 
         .account-prompt {
@@ -217,69 +216,68 @@
     <div class="container" style="height: fit-content;">
         <div class="text-content">
             <div class="me">
-                
                 <form action="/submit-form" method="post">
                     <h1>Registration<br></h1>
-                        <div class="email">
-                            <label for="email">Enter your email</label>
-                            <input type="email"id="email"name="email" required placeholder="exemple@gmail.com"><br>
-                        </div><br>
+                    <div class="email">
+                        <label for="email">Enter your email</label>
+                        <input type="email" id="email" name="email" required placeholder="exemple@gmail.com"><br>
+                    </div><br>
+                
+                    <div class="fname">
+                        <label for="fname">First name</label>
+                        <input type="text" id="fname" name="fname" required><br>
+                    </div><br>
+                
+                    <div class="lname">
+                        <label for="lname">Last name</label>
+                        <input type="text" id="lname" name="lname" required><br>
+                    </div><br>
                     
-                        <div class="fname">
-                            <label for="fname">First name</label>
-                            <input type="text"id="fname"name="fname" required><br>
-                        </div><br>
+                    <div class="password">
+                        <label for="password">Create Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" required 
+                                   placeholder="At least 8 characters" minlength="8">
+                            <span class="password-toggle">👁️</span>
+                        </div>
+                    </div><br>
                     
-                        <div class="lname">
-                            <label for="lname">Last name</label>
-                            <input type="text"id="lname"name="lname" required><br>
-                        </div><br>
+                    <div class="confirm-password">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmPassword" name="confirmPassword" required 
+                                   placeholder="Re-enter your password">
+                            <span class="password-toggle">👁️</span>
+                        </div>
+                    </div><br>
+                
+                    <div class="establishment">
+                        <label for="Establishment">Establishment</label>
+                        <input type="text" id="Establishment" name="Establishment" required><br>
+                    </div><br>
+
+                    <div class="major">
+                        <label for="major">major</label>
+                        <input type="text" id="major" name="major" required><br>
+                    </div><br>
+
+                    <div class="birthdate"> 
+                        <p>Enter your birthdate</p>
+                        <input type="date" /><br>
+                    </div><br>
+
+                    <div class="gender">
+                        <p>Choose your gender:</p>
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label for="male">Male</label>
                         
-                        <div class="password">
-                            <label for="password">Create Password</label>
-                            <div class="password-wrapper">
-                                <input type="password" id="password" name="password" required 
-                                       placeholder="At least 8 characters" minlength="8">
-                                <span class="password-toggle">👁️</span>
-                            </div>
-                        </div><br>
-                        
-                        <div class="confirm-password">
-                            <label for="confirmPassword">Confirm Password</label>
-                            <div class="password-wrapper">
-                                <input type="password" id="confirmPassword" name="confirmPassword" required 
-                                       placeholder="Re-enter your password">
-                                <span class="password-toggle">👁️</span>
-                            </div>
-                        </div><br>
-                    
-                        <div class="establishment">
-                            <label for="Establishment">Establishment</label>
-                            <input type="text"id="Establishment"name="Establishment" required><br>
-                        </div><br>
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">Female</label>
+                    </div><br>
 
-                        <div class="major">
-                            <label for="major">major</label>
-                            <input type="text"id="major"name="major" required><br>
-                        </div><br>
-
-                        <div class="birthdate"> 
-                            <p>Enter your birthdate</p>
-                            <input type="date" /><br>
-                        </div><br>
-
-                        <div class="gender">
-                            <p>Choose your gender:</p>
-                            <input type="radio" id="male" name="gender" value="male">
-                            <label for="male">Male</label>
-                            
-                            <input type="radio" id="female" name="gender" value="female">
-                            <label for="female">Female</label>
-                        </div><br>
-
-                        <div class="signup"><button type="submit" class="Submit-btn">sign up</button>
-                            <p class="account-prompt">Already have an account? <a href="./student_login.html" class="Log-in">Log in</a></p>
-                        </div><br>
+                    <div class="signup"><button type="submit" class="Submit-btn">sign up</button>
+                        <p class="account-prompt">Already have an account? <a href="./student_login.html" class="Log-in">Log in</a></p>
+                    </div><br>
                 </form>
             </div>
         </div>
@@ -308,6 +306,18 @@
                     const input = this.parentElement.querySelector('input');
                     input.type = input.type === 'password' ? 'text' : 'password';
                 });
+            });
+
+            // Real-time password confirmation validation
+            confirmPasswordInput.addEventListener('input', function() {
+                // Clear any existing error message
+                clearError(confirmPasswordInput);
+                
+                // Only show error if both fields have values and they don't match
+                if (passwordInput.value && confirmPasswordInput.value && 
+                    passwordInput.value !== confirmPasswordInput.value) {
+                    showError(confirmPasswordInput, 'Passwords do not match');
+                }
             });
 
             // Determine user type from URL or localStorage
@@ -432,7 +442,6 @@
                         const loginPage = userType === 'teacher' ? 'teacher_login.html' : 'student_login.html';
                         window.location.href = `${loginPage}?from=signup&new_user=true`;
                     }, 2000);
-                    
                 }, 1500);
             }
 
@@ -442,6 +451,8 @@
             }
 
             function showError(input, message) {
+                clearError(input);
+                
                 const errorElement = document.createElement('div');
                 errorElement.className = 'error-message';
                 errorElement.style.color = 'red';
@@ -456,6 +467,14 @@
                 }
                 
                 input.classList.add('error');
+            }
+
+            function clearError(input) {
+                const errorElement = input.parentNode.querySelector('.error-message');
+                if (errorElement) {
+                    errorElement.remove();
+                    input.classList.remove('error');
+                }
             }
 
             function clearErrors() {
