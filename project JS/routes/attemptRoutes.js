@@ -1,22 +1,38 @@
 const express = require('express');
-const { submitAttempt, getExamStats } = require('../controllers/attemptController');
-const authMiddleware = require('../middlewares/auth');
 const router = express.Router();
+const attemptController = require('../controllers/attemptController');
+const authMiddleware = require('../middlewares/auth');
+const { check } = require('express-validator');
 
-await Attempt.create({
-    examId: examId,
-    studentId: studentUserId,
-    answers: [
-        { questionId: "q1", answer: "4" }
+// Submit exam attempt
+router.post(
+    '/exams/:examId/attempts',
+    authMiddleware,
+    [
+        check('answers').isArray().withMessage('Answers must be an array'),
+        check('answers.*.questionId').isMongoId(),
+        check('answers.*.answer').optional().isString(),
+        check('answers.*.selectedOptions').optional().isArray(),
+        check('geolocation.lat').isFloat({ min: -90, max: 90 }),
+        check('geolocation.lng').isFloat({ min: -180, max: 180 })
     ],
-    score: 100
-});
-const stats = await Attempt.aggregate([
-    { $match: { examId: examId } },
-    { $group: { _id: null, avgScore: { $avg: "$score" } } }
-]);
+    attemptController.submitAttempt
+);
 
-router.post('/:examId/attempts', authMiddleware, submitAttempt);
-router.get('/:examId/stats', authMiddleware, getExamStats);
+// Get exam statistics (teacher only)
+router.get(
+    '/exams/:examId/stats',
+    authMiddleware,
+    attemptController.restrictTo('teacher'),
+    attemptController.getExamStats
+);
+
+// Get user's attempt history
+router.get(
+    '/me/attempts',
+    authMiddleware,
+    attemptController.restrictTo('student'),
+    attemptController.getMyAttempts
+);
 
 module.exports = router;
